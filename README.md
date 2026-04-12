@@ -48,39 +48,35 @@ Slack Channels ──► Ingest ──► Parse ──► Dedup ──► Classi
 - **LLM evaluator** — Second-pass LLM reviews classifications, corrects errors, validates aggregation math
 - **Coverage gate** — PR tests require ≥70% coverage
 
-## Setup
+## How It Runs
 
-### 1. GitHub Secrets
+### Primary: Cursor Agent Skill (recommended)
 
-Add these secrets in **Settings → Secrets → Actions**:
+The agent runs directly in Cursor using Slack MCP — no API keys needed.
 
-| Secret | Description |
-|--------|------------|
-| `SLACK_BOT_TOKEN` | Slack bot token with `channels:history` scope |
-| `SLACK_WEBHOOK_URL` | Incoming webhook URL for notifications |
-| `OPENAI_API_KEY` | OpenAI API key for LLM evaluator |
-| `SLACK_NOTIFY_USER_ID` | Slack user ID to @mention (default: `W8FL6URHQ`) |
-
-### 2. Enable GitHub Pages
-
-Go to **Settings → Pages → Source** and select the `gh-pages` branch.
-
-### 3. Local Development
-
-```bash
-cp .env.example .env
-# Edit .env with your tokens
-
-pip install -r requirements.txt
-pytest tests/ -v
-
-# Run with LLM and Slack disabled:
-python -m src.main --skip-llm --skip-slack
+```
+You: "Run VOC analysis"
+Agent: reads Slack channels → classifies → evaluates → publishes dashboard → DMs you
 ```
 
-## Schedule
+The skill is installed at `~/.cursor/skills/last-stretch-voc-analyzer/SKILL.md`.
 
-The analysis runs daily at **7:00 AM PT** via GitHub Actions cron. You can also trigger it manually from the Actions tab.
+Trigger phrases: "run VOC analysis", "VOC report", "last stretch analysis", "R&A feedback"
+
+### Backup: GitHub Actions
+
+A daily cron at 7 AM PST also runs via GitHub Actions (requires secrets for Slack SDK + OpenAI).
+
+## Dashboard
+
+Published to GitHub Pages: https://deepakp1308.github.io/last-stretch-voc-analyzer/
+
+## Local Development
+
+```bash
+pip install -r requirements.txt
+pytest tests/ -v
+```
 
 ## License
 
