@@ -1,0 +1,11 @@
+[run]
+source = src
+omit =
+    src/main.py
+    src/slack_reader.py
+    src/llm_evaluator.py
+    src/config.py
+
+[report]
+fail_under = 70
+show_missing = true
