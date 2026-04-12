@@ -1,0 +1,73 @@
+name: Daily VOC Analysis
+
+on:
+  schedule:
+    - cron: '0 14 * * *'  # 7am PT / 10am ET daily
+  workflow_dispatch:       # manual trigger
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Run unit + e2e tests
+        run: pytest tests/ -v --tb=short --cov=src --cov-report=term-missing
+
+  analyze:
+    name: Run VOC Analysis
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Run analysis pipeline
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SLACK_NOTIFY_USER_ID: ${{ secrets.SLACK_NOTIFY_USER_ID }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: python -m src.main
+
+      - name: Deploy dashboard to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dashboard
+          publish_branch: gh-pages
+          force_orphan: true
+
+  notify-failure:
+    name: Notify on Failure
+    needs: [test, analyze]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send failure alert
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H 'Content-Type: application/json' \
+            -d '{"text": "⚠️ Last Stretch VOC Analyzer pipeline FAILED. Check: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
