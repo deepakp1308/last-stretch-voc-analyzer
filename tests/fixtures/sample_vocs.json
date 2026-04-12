@@ -1,0 +1,72 @@
+[
+  {
+    "text": "*New Survey Response from the In-App Feedback Badge*\n\n*MRR:*  949\n*Plan:* Paid \n*User ID:* 59273049\n*CSAT* Terrible\n*Current Page* https://us13.admin.mailchimp.com/campaigns/\n*Feedback:* The Bounced reports that we export no longer contain all of the audience fields. This is a problem for us. Our association management system (AMS) is integrated with MailChimp. Without this identifier code, which was available until this week, our ability to tag hard bounced email addresses has become much more difficult.\n\n*Fullstory:* https://example.com",
+    "expected_ra": true,
+    "expected_negative": true,
+    "expected_theme": "Export Fields Stripped from Reports",
+    "expected_mrr_tier": "HVC ($299+ MRR)"
+  },
+  {
+    "text": "*Response from CSAT Survey*\n\n*User ID:* 4422690  | *Paid* | *MRR:* 576\n\n*CSAT:* Good\n*Feedback:* There has been a glitch in your system which shows incorrect campaign data. This is destroying how I track KPIs and strategize future campaigns. Please fix it soon!",
+    "expected_ra": true,
+    "expected_negative": true,
+    "expected_theme": "Report Data Accuracy & Metrics Discrepancies",
+    "expected_mrr_tier": "HVC ($299+ MRR)"
+  },
+  {
+    "text": "*New Survey Response from the In-App Feedback Badge*\n\n*MRR:*  1440\n*Plan:* Premium plan \n*User ID:* 149472166\n*CSAT* Terrible\n*Current Page* https://us7.admin.mailchimp.com/analytics/reports/custom-reports/builder\n*Feedback:* Your new reporting sections is awful. It requires so many clicks and selections. Not to mention that I now can't filter by a campaign name. We have to click and click. This is just not a good experience.",
+    "expected_ra": true,
+    "expected_negative": true,
+    "expected_theme": "Custom Reports & Dashboard UX Regression",
+    "expected_mrr_tier": "HVC ($299+ MRR)"
+  },
+  {
+    "text": "*Response from Feedback Badge*\n\n*User ID:* 60554149  | *Paid* | *MRR:*  161\n*Page URL:* https://us1.admin.mailchimp.com/analytics/marketing-dashboard/\n\n*CSAT:* Poor\n*Feedback:* The Campaign Report includes bots and MPP data - please figure out a way to exclude that info",
+    "expected_ra": true,
+    "expected_negative": true,
+    "expected_theme": "Bot / MPP Data Contamination",
+    "expected_mrr_tier": "Non-HVC (<$299 MRR)"
+  },
+  {
+    "text": "*Response from Feedback Badge*\n\n*User ID:* 184849630  | *Standard plan* | *MRR:*  307\n*Page URL:* https://us21.admin.mailchimp.com/audience/subscriber-preferences/\n\n*CSAT:* Good\n*Feedback:* I would like to see the Update Your Preferences feature retired because it is a roadblock to users submitting first party data. Can it please be removed?",
+    "expected_ra": false,
+    "expected_negative": false,
+    "expected_theme": "Miscellaneous / Others",
+    "expected_mrr_tier": "HVC ($299+ MRR)"
+  },
+  {
+    "text": "*Response from CSAT Survey*\n\n*User ID:* 2440774  | *Paid* | *MRR:* 276\n\n*CSAT:* Excellent\n*Feedback:* Bombardier Aerospace absolutely loves using Mailchimp. It's a fantastic online tool for sending information to our customer.",
+    "expected_ra": false,
+    "expected_negative": false,
+    "expected_theme": "Miscellaneous / Others",
+    "expected_mrr_tier": "Non-HVC (<$299 MRR)"
+  },
+  {
+    "text": ":postal_horn: *New HVC Product Feedback Received*\n\n*Customer Name*\nWorld Central Kitchen\n*Impacted Product*\nAnalytics\n*Goal:*\nNumber discrepancy between Custom Reports & Campaign View\n*Constraints:*\nThe numbers in custom reports don't match what she sees in the individual campaign report.\n*Criticality (if specific customer request)*\nP0 (Immediate) – High churn risk\n*Customer UID*\n7165809\n*MRR*\n6664",
+    "expected_ra": true,
+    "expected_negative": true,
+    "expected_theme": "Report Data Accuracy & Metrics Discrepancies",
+    "expected_mrr_tier": "HVC ($299+ MRR)"
+  },
+  {
+    "text": "*New Survey Response from the In-App Feedback Badge*\n\n*MRR:*  13\n*Plan:* Essentials plan \n*User ID:* 154074170\n*CSAT* Terrible\n*Current Page* https://us1.admin.mailchimp.com/campaigns/\n*Feedback:* I upgraded my account but I cannot read any report!!!!",
+    "expected_ra": true,
+    "expected_negative": true,
+    "expected_theme": "Custom Reports & Dashboard UX Regression",
+    "expected_mrr_tier": "Non-HVC (<$299 MRR)"
+  },
+  {
+    "text": "*Response from the PRS Survey*\n\n*User ID:* 175740569  | *Premium plan* | *MRR:* 982\n\n*PRS:* 0\n*Reason:* Ease of Use\n*Feedback:* nothing is intuitive, everything is backwards. Most peoples brains work very differently then how an engineer thinks.",
+    "expected_ra": false,
+    "expected_negative": true,
+    "expected_theme": "Miscellaneous / Others",
+    "expected_mrr_tier": "HVC ($299+ MRR)"
+  },
+  {
+    "text": "*Response from Feedback Badge*\n\n*User ID:* 53673665  | *Paid* | *MRR:*  410\n*Page URL:* https://us12.admin.mailchimp.com/reports/variates?id=15080401\n\n*CSAT:* Poor\n*Feedback:* The new Marketing Dashboard is still unable to display multivariate campaigns clearly. They are labeled as Group A or Group B without the campaign name. Additionally, bot filtering appears broken. Within the test results page, Group A shows 45% but the Marketing Dashboard shows 25.8%.",
+    "expected_ra": true,
+    "expected_negative": true,
+    "expected_theme": "A/B & Multivariate Test Reporting Deficiencies",
+    "expected_mrr_tier": "HVC ($299+ MRR)"
+  }
+]

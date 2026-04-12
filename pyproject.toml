@@ -1,0 +1,9 @@
+[project]
+name = "last-stretch-voc-analyzer"
+version = "1.0.0"
+description = "Daily VOC analysis agent for Reporting & Analytics feedback"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

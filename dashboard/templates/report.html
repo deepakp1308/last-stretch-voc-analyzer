@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Last Stretch VOC Analyzer — Dashboard</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3a;
+    --text: #e4e4e7;
+    --text-muted: #a1a1aa;
+    --accent: #6366f1;
+    --red: #ef4444;
+    --orange: #f97316;
+    --yellow: #eab308;
+    --green: #22c55e;
+    --blue: #3b82f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    padding: 2rem; max-width: 1200px; margin: 0 auto;
+  }
+  h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: var(--text); }
+  h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .subtitle { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem; text-align: center;
+  }
+  .stat-value { font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
+  .priority-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+  }
+  .p1 { background: rgba(239,68,68,0.15); color: var(--red); }
+  .p2 { background: rgba(249,115,22,0.15); color: var(--orange); }
+  .p3 { background: rgba(234,179,8,0.15); color: var(--yellow); }
+  .p4 { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .p5, .p6 { background: rgba(161,161,170,0.15); color: var(--text-muted); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--border); color: var(--text-muted); font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover td { background: rgba(99,102,241,0.04); }
+  .mrr { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .hvc { color: var(--accent); }
+  .non-hvc { color: var(--text-muted); }
+  .eval-badge { padding: 0.3rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.8rem; }
+  .eval-pass { background: rgba(34,197,94,0.15); color: var(--green); }
+  .eval-fail { background: rgba(239,68,68,0.15); color: var(--red); }
+  .feedback-text { max-width: 400px; font-size: 0.8rem; color: var(--text-muted); }
+  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  footer { text-align: center; color: var(--text-muted); font-size: 0.75rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+  <h1>Last Stretch VOC Analyzer</h1>
+  <p class="subtitle">
+    {{ report.date_range_start.strftime('%b %d') }} — {{ report.date_range_end.strftime('%b %d, %Y') }}
+    &middot; Generated {{ report.run_date.strftime('%b %d, %Y at %H:%M UTC') }}
+  </p>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">{{ report.total_raw_messages }}</div>
+      <div class="stat-label">Raw Messages Scanned</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ report.total_deduped }}</div>
+      <div class="stat-label">After Dedup</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--red)">{{ report.total_ra_negative }}</div>
+      <div class="stat-label">R&A Negative VOCs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--orange)">${{ "{:,.0f}".format(report.overall_mrr_exposure) }}</div>
+      <div class="stat-label">Total MRR Exposure</div>
+    </div>
+  </div>
+
+  <h2>Thematic Prioritization</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Theme</th>
+          <th>VOCs</th>
+          <th>Total MRR</th>
+          <th>HVC ($299+)</th>
+          <th>&lt;$299</th>
+          <th>Churn Signals</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bucket in report.theme_buckets %}
+        <tr>
+          <td><span class="priority-badge p{{ loop.index }}">P{{ loop.index }}</span></td>
+          <td><strong>{{ bucket.theme.value }}</strong></td>
+          <td>{{ bucket.vocs | length }}</td>
+          <td class="mrr">${{ "{:,.0f}".format(bucket.total_mrr_exposure) }}</td>
+          <td class="hvc">{{ bucket.hvc_count }} (${{ "{:,.0f}".format(bucket.hvc_mrr_exposure) }})</td>
+          <td class="non-hvc">{{ bucket.non_hvc_count }} (${{ "{:,.0f}".format(bucket.non_hvc_mrr_exposure) }})</td>
+          <td>{{ bucket.churn_signals }}</td>
+          <td>{{ bucket.priority_score }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% for bucket in report.theme_buckets %}
+  <h2>P{{ loop.index }}: {{ bucket.theme.value }}</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>User / Customer</th>
+          <th>MRR</th>
+          <th>CSAT</th>
+          <th>Tier</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for voc in bucket.vocs %}
+        <tr>
+          <td>{{ voc.parsed.raw_message.datetime_utc.strftime('%b %d') }}</td>
+          <td>{{ voc.parsed.customer_name or voc.parsed.user_id or 'Unknown' }}</td>
+          <td class="mrr {% if voc.mrr_tier.value == 'HVC ($299+ MRR)' %}hvc{% endif %}">
+            {% if voc.parsed.mrr %}${{ "{:,.0f}".format(voc.parsed.mrr) }}{% else %}Free{% endif %}
+          </td>
+          <td>{{ voc.parsed.csat or voc.parsed.prs or '—' }}</td>
+          <td>{{ voc.mrr_tier.value }}</td>
+          <td class="feedback-text">{{ voc.parsed.feedback[:200] }}{% if voc.parsed.feedback|length > 200 %}…{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+
+  {% if report.evaluation %}
+  <h2>LLM Quality Gate</h2>
+  <div class="card">
+    <p>
+      <span class="eval-badge {% if report.evaluation.passed %}eval-pass{% else %}eval-fail{% endif %}">
+        {{ 'PASSED' if report.evaluation.passed else 'NEEDS REVIEW' }}
+      </span>
+      &nbsp; Confidence: {{ "{:.0%}".format(report.evaluation.confidence) }}
+      &middot; {{ report.evaluation.total_vocs_reviewed }} VOCs reviewed
+      &middot; {{ report.evaluation.corrections_made }} corrections applied
+    </p>
+    {% if report.evaluation.issues_found %}
+    <h3 style="margin-top: 1rem;">Issues Found</h3>
+    <ul style="padding-left: 1.5rem; color: var(--text-muted); font-size: 0.85rem;">
+      {% for issue in report.evaluation.issues_found %}
+      <li>{{ issue }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">{{ report.evaluation.summary }}</p>
+  </div>
+  {% endif %}
+
+  <footer>
+    Last Stretch VOC Analyzer &middot; Auto-generated daily via GitHub Actions
+  </footer>
+</body>
+</html>
