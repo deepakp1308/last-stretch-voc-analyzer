@@ -1,1 +1,927 @@
-<html><body><h1>Last Stretch VOC Analyzer</h1><p>Dashboard will appear after first daily run.</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Last Stretch VOC Analyzer — Dashboard</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3a;
+    --text: #e4e4e7;
+    --text-muted: #a1a1aa;
+    --accent: #6366f1;
+    --red: #ef4444;
+    --orange: #f97316;
+    --yellow: #eab308;
+    --green: #22c55e;
+    --blue: #3b82f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    padding: 2rem; max-width: 1200px; margin: 0 auto;
+  }
+  h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: var(--text); }
+  h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .subtitle { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem; text-align: center;
+  }
+  .stat-value { font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
+  .priority-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+  }
+  .p1 { background: rgba(239,68,68,0.15); color: var(--red); }
+  .p2 { background: rgba(249,115,22,0.15); color: var(--orange); }
+  .p3 { background: rgba(234,179,8,0.15); color: var(--yellow); }
+  .p4 { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .p5, .p6 { background: rgba(161,161,170,0.15); color: var(--text-muted); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--border); color: var(--text-muted); font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover td { background: rgba(99,102,241,0.04); }
+  .mrr { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .hvc { color: var(--accent); }
+  .non-hvc { color: var(--text-muted); }
+  .eval-badge { padding: 0.3rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.8rem; }
+  .eval-pass { background: rgba(34,197,94,0.15); color: var(--green); }
+  .eval-fail { background: rgba(239,68,68,0.15); color: var(--red); }
+  .feedback-text { max-width: 400px; font-size: 0.8rem; color: var(--text-muted); }
+  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  footer { text-align: center; color: var(--text-muted); font-size: 0.75rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+  <h1>Last Stretch VOC Analyzer</h1>
+  <p class="subtitle">
+    Mar 24 — Apr 12, 2026
+    &middot; Generated Apr 12, 2026 at 17:10 UTC
+  </p>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">120</div>
+      <div class="stat-label">Raw Messages Scanned</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">95</div>
+      <div class="stat-label">After Dedup</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--red)">55</div>
+      <div class="stat-label">R&A Negative VOCs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--orange)">$34,871</div>
+      <div class="stat-label">Total MRR Exposure</div>
+    </div>
+  </div>
+
+  <h2>Thematic Prioritization</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Theme</th>
+          <th>VOCs</th>
+          <th>Total MRR</th>
+          <th>HVC ($299+)</th>
+          <th>&lt;$299</th>
+          <th>Churn Signals</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td><span class="priority-badge p1">P1</span></td>
+          <td><strong>Report Data Accuracy &amp; Metrics Discrepancies</strong></td>
+          <td>14</td>
+          <td class="mrr">$12,140</td>
+          <td class="hvc">5 ($12,081)</td>
+          <td class="non-hvc">4 ($59)</td>
+          <td>4</td>
+          <td>38.9</td>
+        </tr>
+        
+        <tr>
+          <td><span class="priority-badge p2">P2</span></td>
+          <td><strong>Export Fields Stripped from Reports</strong></td>
+          <td>18</td>
+          <td class="mrr">$7,752</td>
+          <td class="hvc">11 ($7,148)</td>
+          <td class="non-hvc">6 ($604)</td>
+          <td>0</td>
+          <td>28.3</td>
+        </tr>
+        
+        <tr>
+          <td><span class="priority-badge p3">P3</span></td>
+          <td><strong>Custom Reports &amp; Dashboard UX Regression</strong></td>
+          <td>13</td>
+          <td class="mrr">$5,628</td>
+          <td class="hvc">4 ($5,382)</td>
+          <td class="non-hvc">6 ($246)</td>
+          <td>0</td>
+          <td>19.1</td>
+        </tr>
+        
+        <tr>
+          <td><span class="priority-badge p4">P4</span></td>
+          <td><strong>A/B &amp; Multivariate Test Reporting Deficiencies</strong></td>
+          <td>3</td>
+          <td class="mrr">$7,074</td>
+          <td class="hvc">2 ($7,074)</td>
+          <td class="non-hvc">0 ($0)</td>
+          <td>0</td>
+          <td>16.1</td>
+        </tr>
+        
+        <tr>
+          <td><span class="priority-badge p5">P5</span></td>
+          <td><strong>Bot / MPP Data Contamination</strong></td>
+          <td>4</td>
+          <td class="mrr">$1,559</td>
+          <td class="hvc">2 ($1,353)</td>
+          <td class="non-hvc">2 ($206)</td>
+          <td>0</td>
+          <td>9.8</td>
+        </tr>
+        
+        <tr>
+          <td><span class="priority-badge p6">P6</span></td>
+          <td><strong>Deprecated Reporting Features</strong></td>
+          <td>3</td>
+          <td class="mrr">$718</td>
+          <td class="hvc">1 ($557)</td>
+          <td class="non-hvc">1 ($161)</td>
+          <td>0</td>
+          <td>6.5</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  
+  <h2>P1: Report Data Accuracy &amp; Metrics Discrepancies</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>User / Customer</th>
+          <th>MRR</th>
+          <th>CSAT</th>
+          <th>Tier</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>Mar 26</td>
+          <td>World Central Kitchen</td>
+          <td class="mrr hvc">
+            $6,664
+          </td>
+          <td>N/A</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Number discrepancy between Custom Reports &amp; Campaign View. Undermines confidence in data.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 26</td>
+          <td>World Central Kitchen</td>
+          <td class="mrr hvc">
+            $6,664
+          </td>
+          <td>N/A</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Delivery Rate displaying as 100% when it&#39;s 99.62%. Rounding is misleading.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 08</td>
+          <td>HC Brands</td>
+          <td class="mrr hvc">
+            $3,488
+          </td>
+          <td>N/A</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Custom Reports pulling all-time revenue for automations, causing revenue spike on March 3.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 07</td>
+          <td>4422690</td>
+          <td class="mrr hvc">
+            $576
+          </td>
+          <td>Good</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Glitch showing incorrect campaign data. Destroying how I track KPIs.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 02</td>
+          <td>53673665</td>
+          <td class="mrr hvc">
+            $410
+          </td>
+          <td>Poor</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Multivariate metrics differ: test results show 45% but Marketing Dashboard shows 25.8%.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 31</td>
+          <td>247468753</td>
+          <td class="mrr ">
+            $13
+          </td>
+          <td>Terrible</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Campaign report metrics briefly show correct then reset to 0 after page loads.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 05</td>
+          <td>58485433</td>
+          <td class="mrr ">
+            Free
+          </td>
+          <td>Poor</td>
+          <td>Free / Unknown</td>
+          <td class="feedback-text">Benchmarking shows 0% open rate when actual is 14.6%.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 30</td>
+          <td>67072717</td>
+          <td class="mrr ">
+            Free
+          </td>
+          <td>Poor</td>
+          <td>Free / Unknown</td>
+          <td class="feedback-text">Historical open rates appear lowered compared to what was previously reported.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 31</td>
+          <td>54352565</td>
+          <td class="mrr ">
+            $13
+          </td>
+          <td>Poor</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Opens report not showing all people who opened my newsletter.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 27</td>
+          <td>39806069</td>
+          <td class="mrr ">
+            Free
+          </td>
+          <td>Excellent</td>
+          <td>Free / Unknown</td>
+          <td class="feedback-text">Status report not showing all opens and clicks.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 07</td>
+          <td>153853466</td>
+          <td class="mrr ">
+            $13
+          </td>
+          <td>Poor</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">US showing as top location but none of my audience is US-based.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 01</td>
+          <td>249964043</td>
+          <td class="mrr ">
+            Free
+          </td>
+          <td>Poor</td>
+          <td>Free / Unknown</td>
+          <td class="feedback-text">Analytics for some campaigns not showing.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 31</td>
+          <td>193055318</td>
+          <td class="mrr ">
+            $20
+          </td>
+          <td>Good</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Stats on homepage differ from detailed view. Took a while to figure out why.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 31</td>
+          <td>32413262</td>
+          <td class="mrr hvc">
+            $943
+          </td>
+          <td>Average</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Click map shows 3000+ clicks on one link for a 400-click campaign. Bot/security filter clicks.</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  
+  <h2>P2: Export Fields Stripped from Reports</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>User / Customer</th>
+          <th>MRR</th>
+          <th>CSAT</th>
+          <th>Tier</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>Apr 11</td>
+          <td>59273049</td>
+          <td class="mrr hvc">
+            $949
+          </td>
+          <td>Terrible</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Bounced reports export no longer contain all audience fields. Our AMS integration requires the identifier code to tag hard bounced emails.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 11</td>
+          <td>59273049</td>
+          <td class="mrr hvc">
+            $949
+          </td>
+          <td>Terrible</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Bounced report no longer contains Bounce reason, just the type. Reason was useful for identifying domain changes and security settings.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 10</td>
+          <td>164104134</td>
+          <td class="mrr ">
+            $100
+          </td>
+          <td>Terrible</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Recent removal of data from Campaign Reporting is a real issue. May need to move client off Mailchimp to another provider.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 10</td>
+          <td>20797307</td>
+          <td class="mrr hvc">
+            $914
+          </td>
+          <td>Terrible</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Campaign exports no longer include IDs — HUGE problem for us. The workaround is wildly inefficient.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 10</td>
+          <td>149472166</td>
+          <td class="mrr hvc">
+            $1,440
+          </td>
+          <td>Terrible</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">New reporting section is awful. Too many clicks. Can&#39;t filter by campaign name.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 09</td>
+          <td>242317258</td>
+          <td class="mrr hvc">
+            $349
+          </td>
+          <td>Poor</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Phone numbers removed from report export. Workaround of building a segment is a hassle.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 08</td>
+          <td>80694118</td>
+          <td class="mrr hvc">
+            $655
+          </td>
+          <td>Average</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Critical audience fields eliminated from unsubscribe reports. Only pulls email, name, and reason now.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 08</td>
+          <td>54009833</td>
+          <td class="mrr ">
+            $132
+          </td>
+          <td>Terrible</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">New reporting export is a whole process. Used to be simple click and export to CSV.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 07</td>
+          <td>58769305</td>
+          <td class="mrr hvc">
+            $534
+          </td>
+          <td>Terrible</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Export reports no longer include vital contact information.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 07</td>
+          <td>170094561</td>
+          <td class="mrr ">
+            $135
+          </td>
+          <td>Terrible</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Reports not helping sales team. Can&#39;t download and separate by salesperson or see companies.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 07</td>
+          <td>156343970</td>
+          <td class="mrr ">
+            $27
+          </td>
+          <td>Poor</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">When I export a report the company is not included anymore. BAD!!!!!</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 07</td>
+          <td>23042471</td>
+          <td class="mrr ">
+            $75
+          </td>
+          <td>Terrible</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Opens and bounced exports missing company, country, rating, bounce reason. Much more work now.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 31</td>
+          <td>192640042</td>
+          <td class="mrr hvc">
+            $871
+          </td>
+          <td>Poor</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Confusing UX for exporting campaign data as CSV. Keeps changing.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 30</td>
+          <td>34717637</td>
+          <td class="mrr hvc">
+            $410
+          </td>
+          <td>Poor</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Custom fields removed from Recipient Activity export. We used this to match back to CRM.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 30</td>
+          <td>197050330</td>
+          <td class="mrr hvc">
+            $310
+          </td>
+          <td>Poor</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Click reports missing company, phone. Platform not performing the way we need it to.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 30</td>
+          <td>7166757</td>
+          <td class="mrr hvc">
+            $376
+          </td>
+          <td>Terrible</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Stop changing the reports. Removed all contact info with no way to add columns to export.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 26</td>
+          <td>45381</td>
+          <td class="mrr hvc">
+            $340
+          </td>
+          <td>Average</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Titles and organizations no longer in email reports. Why the change?</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 26</td>
+          <td>118384814</td>
+          <td class="mrr ">
+            $135
+          </td>
+          <td>Average</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Need Company column on Opens report. It&#39;s the only column I care about.</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  
+  <h2>P3: Custom Reports &amp; Dashboard UX Regression</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>User / Customer</th>
+          <th>MRR</th>
+          <th>CSAT</th>
+          <th>Tier</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>Apr 10</td>
+          <td>149472166</td>
+          <td class="mrr hvc">
+            $1,440
+          </td>
+          <td>Terrible</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">New reporting section is awful. Too many clicks. Can&#39;t filter by campaign name.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 03</td>
+          <td>180695314</td>
+          <td class="mrr hvc">
+            $2,400
+          </td>
+          <td>PRS:5</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Not there yet as enterprise solution. Custom reports removed prior functionality.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 26</td>
+          <td>187541478</td>
+          <td class="mrr hvc">
+            $1,202
+          </td>
+          <td>Average</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Navigation complex, inconsistent graphs for single vs multivariant emails.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 06</td>
+          <td>138383693</td>
+          <td class="mrr hvc">
+            $340
+          </td>
+          <td>Poor</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Can&#39;t find demographics, age, by country, by industry.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 08</td>
+          <td>214434442</td>
+          <td class="mrr ">
+            $27
+          </td>
+          <td>Poor</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Marketing Dashboard doesn&#39;t change with date comparison.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 04</td>
+          <td>38509305</td>
+          <td class="mrr ">
+            $45
+          </td>
+          <td>Poor</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Click performance redirects to recipient activity. Bring back basic functionality.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 07</td>
+          <td>154074170</td>
+          <td class="mrr ">
+            $13
+          </td>
+          <td>Terrible</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Upgraded but I cannot read any report!!!!</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 29</td>
+          <td>132493430</td>
+          <td class="mrr ">
+            $13
+          </td>
+          <td>Average</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Can&#39;t find performance report for last campaign. Had to use email link.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 24</td>
+          <td>111131846</td>
+          <td class="mrr ">
+            $13
+          </td>
+          <td>N/A</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Recipient activity report opens order changed. Beyond irritating.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 11</td>
+          <td>33512929</td>
+          <td class="mrr ">
+            Free
+          </td>
+          <td>Poor</td>
+          <td>Free / Unknown</td>
+          <td class="feedback-text">Reports default order changed for recipient activity opens.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 27</td>
+          <td>39651061</td>
+          <td class="mrr ">
+            Free
+          </td>
+          <td>Terrible</td>
+          <td>Free / Unknown</td>
+          <td class="feedback-text">Report ranking/sorting broken. Can&#39;t see who clicked what.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 06</td>
+          <td>101948674</td>
+          <td class="mrr ">
+            $135
+          </td>
+          <td>Terrible</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">SMS report shows revenue but can&#39;t figure out which orders generated it.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 30</td>
+          <td>147654278</td>
+          <td class="mrr ">
+            Free
+          </td>
+          <td>Average</td>
+          <td>Free / Unknown</td>
+          <td class="feedback-text">Can&#39;t find reports to review audience group engagement.</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  
+  <h2>P4: A/B &amp; Multivariate Test Reporting Deficiencies</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>User / Customer</th>
+          <th>MRR</th>
+          <th>CSAT</th>
+          <th>Tier</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>Mar 26</td>
+          <td>World Central Kitchen</td>
+          <td class="mrr hvc">
+            $6,664
+          </td>
+          <td>N/A</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">A/B test export doesn&#39;t include subject line. Data largely unusable.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 26</td>
+          <td>World Central Kitchen</td>
+          <td class="mrr hvc">
+            $6,664
+          </td>
+          <td>N/A</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Can&#39;t preview HTML of sent A/B test. Buried under Details.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 02</td>
+          <td>53673665</td>
+          <td class="mrr hvc">
+            $410
+          </td>
+          <td>Poor</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Multivariate labeled Group A/B without campaign name. Problematic for multiple tests.</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  
+  <h2>P5: Bot / MPP Data Contamination</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>User / Customer</th>
+          <th>MRR</th>
+          <th>CSAT</th>
+          <th>Tier</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>Mar 31</td>
+          <td>32413262</td>
+          <td class="mrr hvc">
+            $943
+          </td>
+          <td>Average</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Click performance/map stats include bot clicks. 3000+ clicks for 400-click campaign.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 02</td>
+          <td>53673665</td>
+          <td class="mrr hvc">
+            $410
+          </td>
+          <td>Poor</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Bot filtering broken for multivariate test results.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 08</td>
+          <td>60554149</td>
+          <td class="mrr ">
+            $161
+          </td>
+          <td>Poor</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Campaign Report includes bots and MPP data. Please exclude.</td>
+        </tr>
+        
+        <tr>
+          <td>Mar 27</td>
+          <td>46150117</td>
+          <td class="mrr ">
+            $45
+          </td>
+          <td>Average</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Performance reports open to speculation how true they are.</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  
+  <h2>P6: Deprecated Reporting Features</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>User / Customer</th>
+          <th>MRR</th>
+          <th>CSAT</th>
+          <th>Tier</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>Apr 10</td>
+          <td>14432227</td>
+          <td class="mrr ">
+            Free
+          </td>
+          <td>N/A</td>
+          <td>Free / Unknown</td>
+          <td class="feedback-text">Top locations by opens being discontinued. Need replacement for board reports.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 08</td>
+          <td>5131462</td>
+          <td class="mrr hvc">
+            $557
+          </td>
+          <td>Good</td>
+          <td>HVC ($299+ MRR)</td>
+          <td class="feedback-text">Analytics gotten worse. Can&#39;t see mobile device data anymore.</td>
+        </tr>
+        
+        <tr>
+          <td>Apr 08</td>
+          <td>60554149</td>
+          <td class="mrr ">
+            $161
+          </td>
+          <td>Average</td>
+          <td>Non-HVC (&lt;$299 MRR)</td>
+          <td class="feedback-text">Need date range filter for Campaign report export.</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  
+
+  
+  <h2>LLM Quality Gate</h2>
+  <div class="card">
+    <p>
+      <span class="eval-badge eval-pass">
+        PASSED
+      </span>
+      &nbsp; Confidence: 92%
+      &middot; 10 VOCs reviewed
+      &middot; 1 corrections applied
+    </p>
+    
+    <h3 style="margin-top: 1rem;">Issues Found</h3>
+    <ul style="padding-left: 1.5rem; color: var(--text-muted); font-size: 0.85rem;">
+      
+      <li>Minor theme overlap: User 53673665 spans Data Accuracy + Bot/MPP (kept in both as distinct issues)</li>
+      
+    </ul>
+    
+    <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">Evaluation PASSED with 92% confidence. 1 correction applied. 9/10 sampled VOCs verified correct.</p>
+  </div>
+  
+
+  <footer>
+    Last Stretch VOC Analyzer &middot; Auto-generated daily via GitHub Actions
+  </footer>
+</body>
+</html>
