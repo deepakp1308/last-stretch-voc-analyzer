@@ -129,6 +129,17 @@ class EvaluationResult(BaseModel):
     summary: str = ""
 
 
+class CSATDistribution(BaseModel):
+    """CSAT sentiment distribution across all deduped VOCs."""
+    negative_count: int = 0
+    negative_pct: float = 0.0
+    neutral_count: int = 0
+    neutral_pct: float = 0.0
+    positive_count: int = 0
+    positive_pct: float = 0.0
+    total: int = 0
+
+
 class AnalysisReport(BaseModel):
     run_date: datetime
     date_range_start: datetime
@@ -137,6 +148,7 @@ class AnalysisReport(BaseModel):
     total_deduped: int = 0
     total_ra_negative: int = 0
     total_miscellaneous: int = 0
+    csat_distribution: Optional[CSATDistribution] = None
     theme_buckets: list[ThemeBucket] = Field(default_factory=list)
     evaluation: Optional[EvaluationResult] = None
     overall_mrr_exposure: float = 0.0

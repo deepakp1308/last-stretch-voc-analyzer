@@ -58,7 +58,15 @@
   .eval-badge { padding: 0.3rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.8rem; }
   .eval-pass { background: rgba(34,197,94,0.15); color: var(--green); }
   .eval-fail { background: rgba(239,68,68,0.15); color: var(--red); }
-  .feedback-text { max-width: 400px; font-size: 0.8rem; color: var(--text-muted); }
+  .feedback-text { max-width: 350px; font-size: 0.8rem; color: var(--text-muted); }
+  .csat-bar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin-top: 0.75rem; }
+  .csat-bar div { display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; }
+  .csat-neg { background: var(--red); color: #fff; }
+  .csat-neu { background: var(--yellow); color: #000; }
+  .csat-pos { background: var(--green); color: #fff; }
+  .csat-legend { display: flex; gap: 1.5rem; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted); }
+  .csat-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .csat-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
   .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
   footer { text-align: center; color: var(--text-muted); font-size: 0.75rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
 </style>
@@ -88,6 +96,28 @@
       <div class="stat-label">Total MRR Exposure</div>
     </div>
   </div>
+
+  {% if report.csat_distribution %}
+  <div class="card">
+    <h3 style="margin-bottom: 0.5rem;">CSAT Distribution — All {{ report.csat_distribution.total }} Deduped VOCs</h3>
+    <div class="csat-bar">
+      {% if report.csat_distribution.negative_pct > 0 %}
+      <div class="csat-neg" style="width: {{ report.csat_distribution.negative_pct }}%">{{ "{:.0f}".format(report.csat_distribution.negative_pct) }}%</div>
+      {% endif %}
+      {% if report.csat_distribution.neutral_pct > 0 %}
+      <div class="csat-neu" style="width: {{ report.csat_distribution.neutral_pct }}%">{{ "{:.0f}".format(report.csat_distribution.neutral_pct) }}%</div>
+      {% endif %}
+      {% if report.csat_distribution.positive_pct > 0 %}
+      <div class="csat-pos" style="width: {{ report.csat_distribution.positive_pct }}%">{{ "{:.0f}".format(report.csat_distribution.positive_pct) }}%</div>
+      {% endif %}
+    </div>
+    <div class="csat-legend">
+      <span><span class="csat-dot" style="background: var(--red)"></span> Negative (Terrible, Poor, PRS 0–4): <strong>{{ report.csat_distribution.negative_count }}</strong> ({{ "{:.0f}".format(report.csat_distribution.negative_pct) }}%)</span>
+      <span><span class="csat-dot" style="background: var(--yellow)"></span> Neutral (Average, N/A): <strong>{{ report.csat_distribution.neutral_count }}</strong> ({{ "{:.0f}".format(report.csat_distribution.neutral_pct) }}%)</span>
+      <span><span class="csat-dot" style="background: var(--green)"></span> Positive (Good, Excellent): <strong>{{ report.csat_distribution.positive_count }}</strong> ({{ "{:.0f}".format(report.csat_distribution.positive_pct) }}%)</span>
+    </div>
+  </div>
+  {% endif %}
 
   <h2>Thematic Prioritization</h2>
   <div class="card">
