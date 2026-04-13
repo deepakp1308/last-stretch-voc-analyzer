@@ -59,9 +59,14 @@
   .eval-pass { background: rgba(34,197,94,0.15); color: var(--green); }
   .eval-fail { background: rgba(239,68,68,0.15); color: var(--red); }
   .feedback-text { max-width: 350px; font-size: 0.8rem; color: var(--text-muted); }
-  .slack-link { font-size: 0.75rem; white-space: nowrap; }
-  .slack-link a { color: var(--accent); text-decoration: none; }
-  .slack-link a:hover { text-decoration: underline; }
+  .csat-bar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin-top: 0.75rem; }
+  .csat-bar div { display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; }
+  .csat-neg { background: var(--red); color: #fff; }
+  .csat-neu { background: var(--yellow); color: #000; }
+  .csat-pos { background: var(--green); color: #fff; }
+  .csat-legend { display: flex; gap: 1.5rem; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted); }
+  .csat-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .csat-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
   .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
   footer { text-align: center; color: var(--text-muted); font-size: 0.75rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
 </style>
@@ -70,7 +75,7 @@
   <h1>Last Stretch VOC Analyzer</h1>
   <p class="subtitle">
     Mar 24 — Apr 12, 2026
-    &middot; Generated Apr 13, 2026 at 05:29 UTC
+    &middot; Generated Apr 13, 2026 at 05:40 UTC
   </p>
 
   <div class="stats-grid">
@@ -91,6 +96,28 @@
       <div class="stat-label">Total MRR Exposure</div>
     </div>
   </div>
+
+  
+  <div class="card">
+    <h3 style="margin-bottom: 0.5rem;">CSAT Distribution — All 95 Deduped VOCs</h3>
+    <div class="csat-bar">
+      
+      <div class="csat-neg" style="width: 51.6%">52%</div>
+      
+      
+      <div class="csat-neu" style="width: 18.9%">19%</div>
+      
+      
+      <div class="csat-pos" style="width: 29.5%">30%</div>
+      
+    </div>
+    <div class="csat-legend">
+      <span><span class="csat-dot" style="background: var(--red)"></span> Negative (Terrible, Poor, PRS 0–4): <strong>49</strong> (52%)</span>
+      <span><span class="csat-dot" style="background: var(--yellow)"></span> Neutral (Average, N/A): <strong>18</strong> (19%)</span>
+      <span><span class="csat-dot" style="background: var(--green)"></span> Positive (Good, Excellent): <strong>28</strong> (30%)</span>
+    </div>
+  </div>
+  
 
   <h2>Thematic Prioritization</h2>
   <div class="card">
@@ -191,7 +218,6 @@
           <th>CSAT</th>
           <th>Tier</th>
           <th>Feedback</th>
-          <th>Source</th>
         </tr>
       </thead>
       <tbody>
@@ -205,9 +231,6 @@
           <td>Terrible</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Bounced reports export no longer contain all audience fields. Our AMS integration requires the identifier code to tag hard bounced emails.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775926417084339" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -219,9 +242,6 @@
           <td>Terrible</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Bounced report no longer contains Bounce reason, just the type. Reason was useful for identifying domain changes and security settings.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775928857696529" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -233,9 +253,6 @@
           <td>Terrible</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Recent removal of data from Campaign Reporting is a real issue. May need to move client off Mailchimp to another provider.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775857820589519" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -247,9 +264,6 @@
           <td>Terrible</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Campaign exports no longer include IDs — HUGE problem for us. The workaround is wildly inefficient.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C051Y4H98VB/p1775842160820369" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -261,9 +275,6 @@
           <td>Terrible</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">New reporting section is awful. Too many clicks. Can&#39;t filter by campaign name.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775856675596019" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -275,9 +286,6 @@
           <td>Poor</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Phone numbers removed from report export. Workaround of building a segment is a hassle.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775758827351599" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -289,9 +297,6 @@
           <td>Average</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Critical audience fields eliminated from unsubscribe reports. Only pulls email, name, and reason now.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775672361740719" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -303,9 +308,6 @@
           <td>Terrible</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">New reporting export is a whole process. Used to be simple click and export to CSV.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775657646820569" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -317,9 +319,6 @@
           <td>Terrible</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Export reports no longer include vital contact information.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775588801449279" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -331,9 +330,6 @@
           <td>Terrible</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Reports not helping sales team. Can&#39;t download and separate by salesperson or see companies.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775564941317059" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -345,9 +341,6 @@
           <td>Poor</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">When I export a report the company is not included anymore. BAD!!!!!</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775567005517039" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -359,9 +352,6 @@
           <td>Terrible</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Opens and bounced exports missing company, country, rating, bounce reason. Much more work now.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775563960331069" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -373,9 +363,6 @@
           <td>Poor</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Confusing UX for exporting campaign data as CSV. Keeps changing.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774973646137649" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -387,9 +374,6 @@
           <td>Poor</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Custom fields removed from Recipient Activity export. We used this to match back to CRM.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774897449527189" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -401,9 +385,6 @@
           <td>Poor</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Click reports missing company, phone. Platform not performing the way we need it to.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774893438470599" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -415,9 +396,6 @@
           <td>Terrible</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Stop changing the reports. Removed all contact info with no way to add columns to export.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774859631115209" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -429,9 +407,6 @@
           <td>Average</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Titles and organizations no longer in email reports. Why the change?</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774534902701809" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -443,9 +418,6 @@
           <td>Average</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Need Company column on Opens report. It&#39;s the only column I care about.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774531929343409" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
       </tbody>
@@ -463,7 +435,6 @@
           <th>CSAT</th>
           <th>Tier</th>
           <th>Feedback</th>
-          <th>Source</th>
         </tr>
       </thead>
       <tbody>
@@ -477,9 +448,6 @@
           <td>N/A</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Number discrepancy between Custom Reports &amp; Campaign View. Undermines confidence in data.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C095FJ3SQF4/p1774565109503039" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -491,9 +459,6 @@
           <td>N/A</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Delivery Rate displaying as 100% when it&#39;s 99.62%. Rounding is misleading.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C095FJ3SQF4/p1774564765462659" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -505,9 +470,6 @@
           <td>N/A</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Custom Reports pulling all-time revenue for automations, causing revenue spike on March 3.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C095FJ3SQF4/p1775677521843279" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -519,9 +481,6 @@
           <td>Good</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Glitch showing incorrect campaign data. Destroying how I track KPIs.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775581315243039" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -533,9 +492,6 @@
           <td>Poor</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Multivariate metrics differ: test results show 45% but Marketing Dashboard shows 25.8%.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775162701553959" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -547,9 +503,6 @@
           <td>Terrible</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Campaign report metrics briefly show correct then reset to 0 after page loads.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774952346003269" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -561,9 +514,6 @@
           <td>Poor</td>
           <td>Free / Unknown</td>
           <td class="feedback-text">Benchmarking shows 0% open rate when actual is 14.6%.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775404794898799" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -575,9 +525,6 @@
           <td>Poor</td>
           <td>Free / Unknown</td>
           <td class="feedback-text">Historical open rates appear lowered compared to what was previously reported.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774902494362389" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -589,9 +536,6 @@
           <td>Poor</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Opens report not showing all people who opened my newsletter.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775023059594359" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -603,9 +547,6 @@
           <td>Excellent</td>
           <td>Free / Unknown</td>
           <td class="feedback-text">Status report not showing all opens and clicks.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774629424581499" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -617,9 +558,6 @@
           <td>Poor</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">US showing as top location but none of my audience is US-based.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775549586224479" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -631,9 +569,6 @@
           <td>Poor</td>
           <td>Free / Unknown</td>
           <td class="feedback-text">Analytics for some campaigns not showing.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775047445613559" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -645,9 +580,6 @@
           <td>Good</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Stats on homepage differ from detailed view. Took a while to figure out why.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774965452079449" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -659,9 +591,6 @@
           <td>Average</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Click map shows 3000+ clicks on one link for a 400-click campaign. Bot/security filter clicks.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C051Y4H98VB/p1774962447357339" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
       </tbody>
@@ -679,7 +608,6 @@
           <th>CSAT</th>
           <th>Tier</th>
           <th>Feedback</th>
-          <th>Source</th>
         </tr>
       </thead>
       <tbody>
@@ -693,9 +621,6 @@
           <td>Terrible</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">New reporting section is awful. Too many clicks. Can&#39;t filter by campaign name.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775856675596019" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -707,9 +632,6 @@
           <td>PRS:5</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Not there yet as enterprise solution. Custom reports removed prior functionality.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C051Y4H98VB/p1775245449392569" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -721,9 +643,6 @@
           <td>Average</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Navigation complex, inconsistent graphs for single vs multivariant emails.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C051Y4H98VB/p1774559092743299" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -735,9 +654,6 @@
           <td>Poor</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Can&#39;t find demographics, age, by country, by industry.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C051Y4H98VB/p1775491043768299" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -749,9 +665,6 @@
           <td>Poor</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Marketing Dashboard doesn&#39;t change with date comparison.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775675057670129" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -763,9 +676,6 @@
           <td>Poor</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Click performance redirects to recipient activity. Bring back basic functionality.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775336632767369" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -777,9 +687,6 @@
           <td>Terrible</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Upgraded but I cannot read any report!!!!</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775576191005709" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -791,9 +698,6 @@
           <td>Average</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Can&#39;t find performance report for last campaign. Had to use email link.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774836963617519" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -805,9 +709,6 @@
           <td>N/A</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Recipient activity report opens order changed. Beyond irritating.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774379960514459" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -819,9 +720,6 @@
           <td>Poor</td>
           <td>Free / Unknown</td>
           <td class="feedback-text">Reports default order changed for recipient activity opens.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775959225524299" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -833,9 +731,6 @@
           <td>Terrible</td>
           <td>Free / Unknown</td>
           <td class="feedback-text">Report ranking/sorting broken. Can&#39;t see who clicked what.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774633735784069" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -847,9 +742,6 @@
           <td>Terrible</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">SMS report shows revenue but can&#39;t figure out which orders generated it.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775530580433059" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -861,9 +753,6 @@
           <td>Average</td>
           <td>Free / Unknown</td>
           <td class="feedback-text">Can&#39;t find reports to review audience group engagement.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774908679551639" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
       </tbody>
@@ -881,7 +770,6 @@
           <th>CSAT</th>
           <th>Tier</th>
           <th>Feedback</th>
-          <th>Source</th>
         </tr>
       </thead>
       <tbody>
@@ -895,9 +783,6 @@
           <td>N/A</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">A/B test export doesn&#39;t include subject line. Data largely unusable.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C095FJ3SQF4/p1774564574131429" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -909,9 +794,6 @@
           <td>N/A</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Can&#39;t preview HTML of sent A/B test. Buried under Details.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C095FJ3SQF4/p1774564403430009" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -923,9 +805,6 @@
           <td>Poor</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Multivariate labeled Group A/B without campaign name. Problematic for multiple tests.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775162701553959" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
       </tbody>
@@ -943,7 +822,6 @@
           <th>CSAT</th>
           <th>Tier</th>
           <th>Feedback</th>
-          <th>Source</th>
         </tr>
       </thead>
       <tbody>
@@ -957,9 +835,6 @@
           <td>Average</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Click performance/map stats include bot clicks. 3000+ clicks for 400-click campaign.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C051Y4H98VB/p1774962447357339" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -971,9 +846,6 @@
           <td>Poor</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Bot filtering broken for multivariate test results.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C051Y4H98VB/p1775162702200049" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -985,9 +857,6 @@
           <td>Poor</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Campaign Report includes bots and MPP data. Please exclude.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775667698491469" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -999,9 +868,6 @@
           <td>Average</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Performance reports open to speculation how true they are.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1774615637788189" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
       </tbody>
@@ -1019,7 +885,6 @@
           <th>CSAT</th>
           <th>Tier</th>
           <th>Feedback</th>
-          <th>Source</th>
         </tr>
       </thead>
       <tbody>
@@ -1033,9 +898,6 @@
           <td>N/A</td>
           <td>Free / Unknown</td>
           <td class="feedback-text">Top locations by opens being discontinued. Need replacement for board reports.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775821507648479" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -1047,9 +909,6 @@
           <td>Good</td>
           <td>HVC ($299+ MRR)</td>
           <td class="feedback-text">Analytics gotten worse. Can&#39;t see mobile device data anymore.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775656127820969" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
         <tr>
@@ -1061,9 +920,6 @@
           <td>Average</td>
           <td>Non-HVC (&lt;$299 MRR)</td>
           <td class="feedback-text">Need date range filter for Campaign report export.</td>
-          <td class="slack-link">
-            <a href="https://intuit-teams.slack.com/archives/C06SW7512P2/p1775656539159039" target="_blank">View in Slack ↗</a>
-          </td>
         </tr>
         
       </tbody>
