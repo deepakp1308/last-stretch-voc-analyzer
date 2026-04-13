@@ -163,6 +163,7 @@
           <th>CSAT</th>
           <th>Tier</th>
           <th>Feedback</th>
+          <th>Source</th>
         </tr>
       </thead>
       <tbody>
@@ -176,6 +177,7 @@
           <td>{{ voc.parsed.csat or voc.parsed.prs or '—' }}</td>
           <td>{{ voc.mrr_tier.value }}</td>
           <td class="feedback-text">{{ voc.parsed.feedback[:200] }}{% if voc.parsed.feedback|length > 200 %}…{% endif %}</td>
+          <td class="slack-link">{% if voc.parsed.current_page_url %}<a href="{{ voc.parsed.current_page_url }}" target="_blank">View in Slack ↗</a>{% else %}—{% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>

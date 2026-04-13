@@ -9,3 +9,4 @@ build/
 .coverage
 htmlcov/
 dashboard/index.html
+logs/

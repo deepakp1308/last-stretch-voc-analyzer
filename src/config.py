@@ -28,9 +28,8 @@ def get_date_range() -> tuple[datetime, datetime]:
     """Return (start, end) for the analysis window.
 
     Start: March 24 of the current year (last week of March).
-    End: today at 23:59:59 UTC (month-to-date).
+    End: current timestamp when the pull is initiated.
     """
     now = datetime.now(timezone.utc)
     start = datetime(now.year, 3, 24, tzinfo=timezone.utc)
-    end = now.replace(hour=23, minute=59, second=59, microsecond=0)
-    return start, end
+    return start, now

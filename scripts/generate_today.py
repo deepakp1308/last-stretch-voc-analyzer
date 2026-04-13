@@ -66,6 +66,7 @@ t1_vocs = [
     _voc("7166757",376,"Terrible","Stop changing the reports. Removed all contact info with no way to add columns to export.",Theme.EXPORT_FIELDS_STRIPPED,"2026-03-30","1774859631.115209"),
     _voc("45381",340,"Average","Titles and organizations no longer in email reports. Why the change?",Theme.EXPORT_FIELDS_STRIPPED,"2026-03-26","1774534902.701809"),
     _voc("118384814",135,"Average","Need Company column on Opens report. It's the only column I care about.",Theme.EXPORT_FIELDS_STRIPPED,"2026-03-26","1774531929.343409"),
+    _voc("121544750",103,"N/A","Missing additional column information when exporting recipient data from a sent campaign. Please can we have it back.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-13","1776075626.359059"),
 ]
 
 # === THEME 2: Data Accuracy ===
@@ -169,32 +170,29 @@ remaining = sorted([
 
 buckets = [b_export] + remaining
 
-# --- CSAT distribution across ALL 95 deduped VOCs ---
-# From the full channel scan: 95 deduped VOCs with this CSAT breakdown
-# Counted from raw data across all 3 channels after dedup:
-#   Terrible: 24, Poor: 25, PRS 0-4: 8 → some overlap with Terrible/Poor
-#   Average: 13, N/A or missing CSAT: 5
-#   Good: 14, Excellent: 6
-# Negative = Terrible + Poor + (PRS 0-4 not already in Terrible/Poor) = 49
-# Neutral = Average + N/A/missing = 18
-# Positive = Good + Excellent = 28
-# Total = 49 + 18 + 28 = 95 ✓
-TOTAL_DEDUPED = 95
+# --- CSAT distribution across ALL 102 deduped VOCs ---
+# Original 95 + 7 new (Apr 13): 3 from ch1, 4 from ch2, 0 from ch3
+# New breakdown:
+#   Negative (Terrible/Poor/PRS 0-4): 49 + 3 (Terrible x2 + Poor x1) = 52
+#   Neutral (Average/N/A/missing): 18 + 2 (no CSAT x2) = 20
+#   Positive (Good/Excellent): 28 + 2 (Excellent + Good) = 30
+# Total: 52 + 20 + 30 = 102 ✓
+TOTAL_DEDUPED = 102
 csat_dist = CSATDistribution(
-    negative_count=49,
-    negative_pct=round(49 / TOTAL_DEDUPED * 100, 1),
-    neutral_count=18,
-    neutral_pct=round(18 / TOTAL_DEDUPED * 100, 1),
-    positive_count=28,
-    positive_pct=round(28 / TOTAL_DEDUPED * 100, 1),
+    negative_count=52,
+    negative_pct=round(52 / TOTAL_DEDUPED * 100, 1),
+    neutral_count=20,
+    neutral_pct=round(20 / TOTAL_DEDUPED * 100, 1),
+    positive_count=30,
+    positive_pct=round(30 / TOTAL_DEDUPED * 100, 1),
     total=TOTAL_DEDUPED,
 )
 
 report = AnalysisReport(
     run_date=datetime.now(timezone.utc),
     date_range_start=datetime(2026, 3, 24, tzinfo=timezone.utc),
-    date_range_end=datetime(2026, 4, 12, tzinfo=timezone.utc),
-    total_raw_messages=120,
+    date_range_end=datetime.now(timezone.utc),
+    total_raw_messages=127,
     total_deduped=TOTAL_DEDUPED,
     total_ra_negative=sum(len(b.vocs) for b in buckets),
     total_miscellaneous=48,
