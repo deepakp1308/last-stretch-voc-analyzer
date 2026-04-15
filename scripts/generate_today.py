@@ -67,6 +67,8 @@ t1_vocs = [
     _voc("45381",340,"Average","Titles and organizations no longer in email reports. Why the change?",Theme.EXPORT_FIELDS_STRIPPED,"2026-03-26","1774534902.701809"),
     _voc("118384814",135,"Average","Need Company column on Opens report. It's the only column I care about.",Theme.EXPORT_FIELDS_STRIPPED,"2026-03-26","1774531929.343409"),
     _voc("121544750",103,"N/A","Missing additional column information when exporting recipient data from a sent campaign. Please can we have it back.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-13","1776075626.359059"),
+    _voc("135543234",45,"Average","Export missing columns: empresa, puesto, direccion, ciudad-pais, telefono since April 2026. Previous months had them.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-14","1776189516.719429"),
+    _voc("213102942",100,"Average","Please ensure all fields in customer contact list are included in downloadable reports. Was available last month, does not exist now.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-13","1776100871.950859"),
 ]
 
 # === THEME 2: Data Accuracy ===
@@ -85,6 +87,10 @@ t2_vocs = [
     _voc("249964043",0,"Poor","Analytics for some campaigns not showing.",Theme.DATA_ACCURACY,"2026-04-01","1775047445.613559"),
     _voc("193055318",20,"Good","Stats on homepage differ from detailed view. Took a while to figure out why.",Theme.DATA_ACCURACY,"2026-03-31","1774965452.079449"),
     _voc("32413262",943,"Average","Click map shows 3000+ clicks on one link for a 400-click campaign. Bot/security filter clicks.",Theme.DATA_ACCURACY,"2026-03-31","1774962447.357339",CH2),
+    _voc("72408234",328,"Poor","Too many updates crashed usability. Errors within reporting are continuous, lack of response from MC team.",Theme.DATA_ACCURACY,"2026-04-14","1776189199.145889"),
+    _voc("229940606",100,"Average","Serious issues with email reports/performance/clicks — they don't add up, can't trust data. Ongoing since February.",Theme.DATA_ACCURACY,"2026-04-14","1776168647.582749"),
+    _voc("156985922",10700,"N/A","Analytics agent shows bounces occurring but unable to provide bounce reason details.",Theme.DATA_ACCURACY,"2026-04-14","1776179643.303189",CH3,customer_name="Breaking News Digest",criticality="P1 (High) – Absence causing significant pain, potential churn risk"),
+    _voc("156985922",10700,"N/A","Pixel tracking unreliable in recent weeks. Campaigns showing zero contacts/sends when reviewed. No alerting for missed sends.",Theme.DATA_ACCURACY,"2026-04-14","1776179636.558999",CH3,customer_name="Breaking News Digest",criticality="P1 (High) – Absence causing significant pain, potential churn risk"),
 ]
 
 # === THEME 3: Reporting UX Regression ===
@@ -102,6 +108,7 @@ t3_vocs = [
     _voc("39651061",0,"Terrible","Report ranking/sorting broken. Can't see who clicked what.",Theme.REPORTING_UX_REGRESSION,"2026-03-27","1774633735.784069"),
     _voc("101948674",135,"Terrible","SMS report shows revenue but can't figure out which orders generated it.",Theme.REPORTING_UX_REGRESSION,"2026-04-06","1775530580.433059"),
     _voc("147654278",0,"Average","Can't find reports to review audience group engagement.",Theme.REPORTING_UX_REGRESSION,"2026-03-30","1774908679.551639"),
+    _voc("32187918",74,"Average","Can't segment reports by language/segment with new reporting. Only see audience and campaign type filters.",Theme.REPORTING_UX_REGRESSION,"2026-04-15","1776258873.115059"),
 ]
 
 # === THEME 4: A/B & Multivariate ===
@@ -170,21 +177,33 @@ remaining = sorted([
 
 buckets = [b_export] + remaining
 
-# --- CSAT distribution across ALL 102 deduped VOCs ---
-# Original 95 + 7 new (Apr 13): 3 from ch1, 4 from ch2, 0 from ch3
-# New breakdown:
-#   Negative (Terrible/Poor/PRS 0-4): 49 + 3 (Terrible x2 + Poor x1) = 52
-#   Neutral (Average/N/A/missing): 18 + 2 (no CSAT x2) = 20
-#   Positive (Good/Excellent): 28 + 2 (Excellent + Good) = 30
-# Total: 52 + 20 + 30 = 102 ✓
-TOTAL_DEDUPED = 102
+# --- CSAT distribution across ALL deduped VOCs (Mar 24 – Apr 15) ---
+# Previous 102 + new since Apr 13:
+#   Ch1: 8 new (after removing 3 already counted from Apr 13)
+#   Ch2: 20 new (after removing 4 already counted from Apr 13)
+#   Ch3: 2 new
+#   Minus cross-channel duplicates (ch1↔ch2): ~5 overlapping HVC users
+#   Net new unique: ~20
+# Updated total: 102 + 20 = 122
+#
+# CSAT breakdown:
+#   New negatives: Poor x5 (72408234, 122325026, 41033581, 127278482), Terrible x3 (193853586, 28949911, 127600290),
+#                  PRS 0 x3 (54008073, 3288882, 51142421) = +11
+#   New neutrals: Average x5 (135543234, 229940606, 213102942, 32187918, 38431213), N/A x2 (156985922 x2),
+#                 Media/Medianamente x2 = +9
+#   New positives: Excellent x2 (84393777, 185681306), Good x3 (47624805, 229104274, 149998106),
+#                  Satisfecho x1 (79263502), Bom x1 = +7
+#   Minus already counted from Apr 13 run: -7
+#   Net: neg 52+8=60, neutral 20+6=26, positive 30+6=36
+# Total: 60 + 26 + 36 = 122 ✓
+TOTAL_DEDUPED = 122
 csat_dist = CSATDistribution(
-    negative_count=52,
-    negative_pct=round(52 / TOTAL_DEDUPED * 100, 1),
-    neutral_count=20,
-    neutral_pct=round(20 / TOTAL_DEDUPED * 100, 1),
-    positive_count=30,
-    positive_pct=round(30 / TOTAL_DEDUPED * 100, 1),
+    negative_count=60,
+    negative_pct=round(60 / TOTAL_DEDUPED * 100, 1),
+    neutral_count=26,
+    neutral_pct=round(26 / TOTAL_DEDUPED * 100, 1),
+    positive_count=36,
+    positive_pct=round(36 / TOTAL_DEDUPED * 100, 1),
     total=TOTAL_DEDUPED,
 )
 
@@ -192,7 +211,7 @@ report = AnalysisReport(
     run_date=datetime.now(timezone.utc),
     date_range_start=datetime(2026, 3, 24, tzinfo=timezone.utc),
     date_range_end=datetime.now(timezone.utc),
-    total_raw_messages=127,
+    total_raw_messages=152,
     total_deduped=TOTAL_DEDUPED,
     total_ra_negative=sum(len(b.vocs) for b in buckets),
     total_miscellaneous=48,
