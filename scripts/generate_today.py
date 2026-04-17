@@ -69,6 +69,9 @@ t1_vocs = [
     _voc("121544750",103,"N/A","Missing additional column information when exporting recipient data from a sent campaign. Please can we have it back.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-13","1776075626.359059"),
     _voc("135543234",45,"Average","Export missing columns: empresa, puesto, direccion, ciudad-pais, telefono since April 2026. Previous months had them.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-14","1776189516.719429"),
     _voc("213102942",100,"Average","Please ensure all fields in customer contact list are included in downloadable reports. Was available last month, does not exist now.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-13","1776100871.950859"),
+    _voc("67933089",135,"N/A","Recipient Activity export now only has 5 columns (email, name, opens, clicks). Missing Territory, Account, Job Title. Sales team needs these fields.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-16","1776347653.730259"),
+    _voc("11007907",45,"Terrible","Update has materially degraded Click report. Removing URL column eliminates critical data point for daily operations. Report no longer fit for purpose.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-15","1776313888.732809"),
+    _voc("248311374",23,"Terrible","Update has materially degraded Click report. Removing URL column eliminates critical data point for daily operations. Not workable for us.",Theme.EXPORT_FIELDS_STRIPPED,"2026-04-15","1776313877.291839"),
 ]
 
 # === THEME 2: Data Accuracy ===
@@ -91,6 +94,8 @@ t2_vocs = [
     _voc("229940606",100,"Average","Serious issues with email reports/performance/clicks — they don't add up, can't trust data. Ongoing since February.",Theme.DATA_ACCURACY,"2026-04-14","1776168647.582749"),
     _voc("156985922",10700,"N/A","Analytics agent shows bounces occurring but unable to provide bounce reason details.",Theme.DATA_ACCURACY,"2026-04-14","1776179643.303189",CH3,customer_name="Breaking News Digest",criticality="P1 (High) – Absence causing significant pain, potential churn risk"),
     _voc("156985922",10700,"N/A","Pixel tracking unreliable in recent weeks. Campaigns showing zero contacts/sends when reviewed. No alerting for missed sends.",Theme.DATA_ACCURACY,"2026-04-14","1776179636.558999",CH3,customer_name="Breaking News Digest",criticality="P1 (High) – Absence causing significant pain, potential churn risk"),
+    _voc("35098121",0,"Terrible","All campaigns page shows 54.4% opens but View Report shows 0 opens. Can't track opens. Happened on this and previous campaign.",Theme.DATA_ACCURACY,"2026-04-16","1776357159.662789"),
+    _voc("20782035",1260,"PRS:4","Lots of bugs and developers are removing useful tools. Bugs often met in segments and reports.",Theme.DATA_ACCURACY,"2026-04-16","1776378518.194509",CH2),
 ]
 
 # === THEME 3: Reporting UX Regression ===
@@ -109,6 +114,8 @@ t3_vocs = [
     _voc("101948674",135,"Terrible","SMS report shows revenue but can't figure out which orders generated it.",Theme.REPORTING_UX_REGRESSION,"2026-04-06","1775530580.433059"),
     _voc("147654278",0,"Average","Can't find reports to review audience group engagement.",Theme.REPORTING_UX_REGRESSION,"2026-03-30","1774908679.551639"),
     _voc("32187918",74,"Average","Can't segment reports by language/segment with new reporting. Only see audience and campaign type filters.",Theme.REPORTING_UX_REGRESSION,"2026-04-15","1776258873.115059"),
+    _voc("740741",132,"Average","Restore the basic reports as you had previously.",Theme.REPORTING_UX_REGRESSION,"2026-04-15","1776290612.125059"),
+    _voc("70404633",1750,"Poor","Poor interface. Hide stats I need to see. Raises rates. About to leave you.",Theme.REPORTING_UX_REGRESSION,"2026-04-16","1776367049.895799",CH2),
 ]
 
 # === THEME 4: A/B & Multivariate ===
@@ -124,6 +131,7 @@ t5_vocs = [
     _voc("53673665",410,"Poor","Bot filtering broken for multivariate test results.",Theme.BOT_MPP_CONTAMINATION,"2026-04-02","1775162702.200049",CH2),
     _voc("60554149",161,"Poor","Campaign Report includes bots and MPP data. Please exclude.",Theme.BOT_MPP_CONTAMINATION,"2026-04-08","1775667698.491469"),
     _voc("46150117",45,"Average","Performance reports open to speculation how true they are.",Theme.BOT_MPP_CONTAMINATION,"2026-03-27","1774615637.788189"),
+    _voc("38509305",45,"Terrible","Link clicks STILL redirecting to all recipient activity. Also many fake link clicks invalidating performance report data.",Theme.BOT_MPP_CONTAMINATION,"2026-04-15","1776287388.896639"),
 ]
 
 # === THEME 6: Deprecated Features ===
@@ -196,14 +204,18 @@ buckets = [b_export] + remaining
 #   Minus already counted from Apr 13 run: -7
 #   Net: neg 52+8=60, neutral 20+6=26, positive 30+6=36
 # Total: 60 + 26 + 36 = 122 ✓
-TOTAL_DEDUPED = 122
+# --- CSAT distribution: Mar 24 – Apr 17 9:30 AM PST ---
+# Previous 122 + ~24 new unique (27 raw, ~3 cross-channel dups)
+# Updated: neg 60+9=69, neutral 26+6=32, positive 36+9=45
+# Total: 69+32+45 = 146 ✓
+TOTAL_DEDUPED = 146
 csat_dist = CSATDistribution(
-    negative_count=60,
-    negative_pct=round(60 / TOTAL_DEDUPED * 100, 1),
-    neutral_count=26,
-    neutral_pct=round(26 / TOTAL_DEDUPED * 100, 1),
-    positive_count=36,
-    positive_pct=round(36 / TOTAL_DEDUPED * 100, 1),
+    negative_count=69,
+    negative_pct=round(69 / TOTAL_DEDUPED * 100, 1),
+    neutral_count=32,
+    neutral_pct=round(32 / TOTAL_DEDUPED * 100, 1),
+    positive_count=45,
+    positive_pct=round(45 / TOTAL_DEDUPED * 100, 1),
     total=TOTAL_DEDUPED,
 )
 
@@ -211,7 +223,7 @@ report = AnalysisReport(
     run_date=datetime.now(timezone.utc),
     date_range_start=datetime(2026, 3, 24, tzinfo=timezone.utc),
     date_range_end=datetime.now(timezone.utc),
-    total_raw_messages=152,
+    total_raw_messages=179,
     total_deduped=TOTAL_DEDUPED,
     total_ra_negative=sum(len(b.vocs) for b in buckets),
     total_miscellaneous=48,
